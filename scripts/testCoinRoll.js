@@ -19,20 +19,30 @@ async function main() {
     // Create a new instance of the Contract with a Signer, which allows
     // update methods
 
+    /** @notice send ether code block
     const transactionRequest = await signer.sendTransaction(
         { to: contractAdress,
         value: ethers.parseUnits('200')// Sending 1 ETH
         // Other optional parameters can be included here
         });
     console.log(transactionRequest);
+    */
 
     // at this moment the contract is reciving fund it has 900 plus eth
     //i will place a bet eith out passing an amount, to se if the function run
+
     let balance = await provider.getBalance(contractAdress);
 
-    console.log('\n contract balance shoukd be eth: ',balance);
+    console.log('\n contract balance: ',balance, '\n');
+
+    let tx = await contract.checkYourBet();
+    console.log(tx);
 
     /**
+    let contractSigner = contract.connect(signer);
+    let tx = await contractSigner.placeBet(1, 1);
+    console.log(tx);
+    
     //let contractSigner = contract.connect(signer);
     let tx = await contract.placeBet(1, 1);
     console.log(tx);
