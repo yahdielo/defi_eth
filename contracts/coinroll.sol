@@ -20,7 +20,7 @@ contract coinRoll {
     // this event will emit every time a deposit is made
     event fundsDeposited(address sender, uint256 amount);
     event betWasMade(uint amount);
-    event withdrawalAMde( address _to, uint256 amount);
+    event withdrawalMade( address _to, uint256 amount);
 
     constructor() {
         owner = msg.sender;
@@ -39,14 +39,15 @@ contract coinRoll {
         require(msg.sender.value > 0);
         players[msg.sender].playerAddress = msg.sender;
         players[msg.sender].betAmount = msg.value;
-        emit fundsDeposited(msg.sender,players[msg.sender].betAmount );
+        emit fundsDeposited(address(msg.sender), players[msg.sender].betAmount);
     }
 
-    function withdraw() external payable {
-        require(players[msg.sender].betAmount > 0);
-        (bool, s) = msg.sender.call( value : players[msg.sender].betAmount)("");
+    function withdraw(uint256 _amount) external payable {
+        require(players[msg.sender].betAmount >  _amount);
+        players[msg.sender].betAmount -=  _amount;
+        (bool s,) = msg.sender.call.value(_amount)("");
         require(s);
-        withdrawalAMde(msg.sender, players[msg.sender].betAmount);
+        withdrawalMade(address(msg.sender), players[msg.sender].betAmount);
     }
 
     function placeBet(uint _side) external payable {

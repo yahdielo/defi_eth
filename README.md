@@ -12,7 +12,7 @@ set up a random outcome using oracles.
 
 # hardhat node
 
-the command:     hardhat node
+the command:    npx hardhat node
 
 will start a local enviroment where you can test the functionalities of your smart contract.
 when you run the **hardhat node** you will see like 10 account created with 100+ eth to play with,
@@ -38,10 +38,22 @@ a block will be mine on every transaction by default.
 
 # documentation for errors
 
-one of the thigs that had me looking was the my calls where failing when wanting to send eth
+developing the testCoinRool.js one of the things that had me looking was that my calls where failing when wanting to send eth
 and calling ethes.utils.parseUnit(1 //ether); this was failing and found a fix the new version is 
 ethers.parseUnit(1 //ether);
 
-jere is the link for that
+
+here is the link for that
 
     https://stackoverflow.com/questions/76536790/cannot-read-properties-of-undefined-reading-parseunits-hardhat-js
+
+# lowlevel call
+
+in the solidity coinroll contract in the withdrw function i was usinf this old syntax
+to send eth     recipient.call{ value : 1 //ether }(");  and it was fialinf, and found this way wish is the updated one 
+
+        //this sintaz is the updated version to make a low level call
+        (bool s,) = msg.sender.call.value(_amount)("");
+
+here is the reference:
+    https://ethereum.stackexchange.com/questions/118859/what-is-returned-from-msg-sender-callvalue-amount
