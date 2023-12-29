@@ -32,7 +32,7 @@ contract coinRoll {
     // @notice the bet amount has to be in ether
     function placeBet(uint256 _betAmount,uint8 _side) external payable {
 
-        if (_betAmount < 0)
+        if (_betAmount == 0)
             revert amountCantBeZero();
 
         if (_side != 1 && _side != 0)

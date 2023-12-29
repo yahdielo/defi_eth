@@ -40,7 +40,7 @@ a block will be mine on every transaction by default.
 
 one of the thigs that had me looking was the my calls where failing when wanting to send eth
 and calling ethes.utils.parseUnit(1 //ether); this was failing and found a fix the new version is 
-ethers.Unit(1 //ether);
+ethers.parseUnit(1 //ether);
 
 jere is the link for that
 

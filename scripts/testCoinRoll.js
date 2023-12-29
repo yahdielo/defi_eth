@@ -1,5 +1,5 @@
-const hre = require("hardhat");
-const { ethers, showThrottleMessage } = require("ethers");
+
+const { ethers } = require("hardhat");
 
 require('dotenv').config()
 
@@ -10,25 +10,38 @@ const tWallet_1_address = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8';
 const contractAdress = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
 const contractABI  = require("../artifacts/contracts/coinroll.sol/coinRoll.json");
 const provider = new ethers.JsonRpcProvider('http://127.0.0.1:8545/');
-const signer  = new ethers.Wallet(process.env.ADDRESS_0_PRIVATE_KEY, provider);
-//const signer2  = new ethers.Wallet(process.env.ADDRESS_1_PRIVATE_KEY, provider);
+//const signer  = new ethers.Wallet(process.env.ADDRESS_0_PRIVATE_KEY, provider);
+const signer  = new ethers.Wallet(process.env.ADDRESS_1_PRIVATE_KEY, provider);
 const contract = new ethers.Contract(contractAdress, contractABI, provider);
-const transactionRequest = {
-    to: tWallet_1_address,
-    value: ethers.parseUnits('931', 'ether')// Sending 1 ETH
-    // Other optional parameters can be included here
-  };
 
 async function main() {
+  
+    // Create a new instance of the Contract with a Signer, which allows
+    // update methods
 
-    let balance = await provider.getBalance(contractDeployer);
-    console.log('contract deployer balance: ', balance);
+    const transactionRequest = await signer.sendTransaction(
+        { to: contractAdress,
+        value: ethers.parseUnits('200')// Sending 1 ETH
+        // Other optional parameters can be included here
+        });
+    console.log(transactionRequest);
 
-    const tx = await signer.sendTransaction(transactionRequest);
+    // at this moment the contract is reciving fund it has 900 plus eth
+    //i will place a bet eith out passing an amount, to se if the function run
+    let balance = await provider.getBalance(contractAdress);
+
+    console.log('\n contract balance shoukd be eth: ',balance);
+
+    /**
+    //let contractSigner = contract.connect(signer);
+    let tx = await contract.placeBet(1, 1);
     console.log(tx);
 
-    let newbalance = await provider.getBalance(contractDeployer);
-    console.log('contract deployer balance after transaction: ', newbalance);
+    let balance = await provider.getBalance(contractAdress);
+    console.log('contract balance: ',balance); 
+    let newcurrentValue = await provider.getBalance(contractAdress);
+    console.log('contract deployer balance: ',  newcurrentValue);
+    */
 
 }
 
