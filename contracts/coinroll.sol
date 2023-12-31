@@ -19,7 +19,7 @@ contract coinRoll {
     event winnerPayOut(address reciever, uint256 payAmount);
     // this event will emit every time a deposit is made
     event fundsDeposited(address sender, uint256 amount);
-    event betWasMade(uint amount);
+    event side(uint amount);
     event withdrawalMade( address _to, uint256 amount);
 
     constructor() {
@@ -29,38 +29,41 @@ contract coinRoll {
     mapping(address => Player) public players;
 
     // @notice for testing the return will always be 0 for heads
-    function roll() internal pure returns(uint){
+    function roll() internal pure returns(uint) {
         return 0;
     }
-
     // @notice this fall back function will map user deposited amount and assume is as a bet
-    function recieve() external payable {
+    function placeBet(uint _side) public {
+
+        if (_side != 0 && _side != 1)
+            revert choseAside();
+        players[msg.sender].side = _side;
+
+        emit side(_side);
+    }
+
+    receive() external payable {
     
-        require(msg.sender.value > 0);
+        require(msg.value != 0);
         players[msg.sender].playerAddress = msg.sender;
-        players[msg.sender].betAmount = msg.value;
+        players[msg.sender].betAmount += msg.value;
+
         emit fundsDeposited(address(msg.sender), players[msg.sender].betAmount);
     }
 
-    function withdraw(uint256 _amount) external payable {
-        require(players[msg.sender].betAmount >  _amount);
+    function withdrawal(uint256 _amount) external payable {
+        require(players[msg.sender].betAmount >=  _amount);
+
         players[msg.sender].betAmount -=  _amount;
-        (bool s,) = msg.sender.call.value(_amount)("");
+        (bool s,) = msg.sender.call{ value : _amount}("");
+
         require(s);
-        withdrawalMade(address(msg.sender), players[msg.sender].betAmount);
+
+        emit withdrawalMade(msg.sender, _amount);
+
     }
 
-    function placeBet(uint _side) external payable {
-
-
-        if (_side != 1 && _side != 0)
-            revert choseAside();
-        
-        players[msg.sender].side = _side;
-        emit betWasMade(side);
-    }
-
-    function myBet() public view returns(uint256){
-        return players[msg.sender].betAmount;
+    function myBet() public view returns(uint256 , uint){
+        return (players[msg.sender].betAmount, players[msg.sender].side);
     }
 }

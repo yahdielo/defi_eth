@@ -3,55 +3,71 @@ const { ethers } = require("hardhat");
 
 require('dotenv').config()
 
+// TODO:  creat a class or multimple classes to handle differetn methods and actions
+// like sending eth and withdrawing eth, listen to diferent events of contracts
+//   fetch defi token prices, trace nft floor price  *least important
 //test wallets
-const contractDeployer = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
-const tWallet_1_address = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8';
+const contractDeployer = process.env.ADDRESS_0_PRIVATE_KEY;
+const ADDRESS_1 = process.env.ADDRESS_1_PRIVATE_KEY;
 
-const contractAdress = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+const contractAdress = '0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0';
 const contractABI  = require("../artifacts/contracts/coinroll.sol/coinRoll.json");
 const provider = new ethers.JsonRpcProvider('http://127.0.0.1:8545/');
 //const signer  = new ethers.Wallet(process.env.ADDRESS_0_PRIVATE_KEY, provider);
 const signer  = new ethers.Wallet(process.env.ADDRESS_1_PRIVATE_KEY, provider);
 const contract = new ethers.Contract(contractAdress, contractABI, provider);
 
-async function main() {
-  
-    // Create a new instance of the Contract with a Signer, which allows
-    // update methods
+async function sendEther(amount) {
+    try {
+        let  transactionRequest = await signer.sendTransaction(
+            { 
+                to: contractAdress,
+                value: ethers.parseUnits(`${amount}`)// Sending 200 ETH
+            });
+        let sendTx = await contract.receive(transactionRequest);
+        console.log(sendTx);
+    } catch (error) {
+        console.error(error);
+    }
+}
 
-    /** @notice send ether code block
-    const transactionRequest = await signer.sendTransaction(
-        { to: contractAdress,
-        value: ethers.parseUnits('200')// Sending 1 ETH
-        // Other optional parameters can be included here
-        });
-    console.log(transactionRequest);
-    */
+async function makeAbet() {
+    try {
+
+        let tx = await contract.placeBet(1);
+        console.log(tx);
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function main() {
+
+
+    // @notice send ether code block
+
+    //let tx = await sendEther();
+    
+   // console.log(tx);
+
+    // @notice txSigner is needed to actually allow the interaction with the contract
+    // if not it will fail
+   let txSigner = contract.connect(signer);
+   console.log(`this is the txSiger: ${txSigner}\n`);
+
+   let newTx = await txSigner.withdrawal(ethers.parseUnits('1'));
+   console.log(`newTx : \n${newTx}`);
 
     // at this moment the contract is reciving fund it has 900 plus eth
     //i will place a bet eith out passing an amount, to se if the function run
 
     let balance = await provider.getBalance(contractAdress);
+    console.log('----------------------------------------');
 
     console.log('\n contract balance: ',balance, '\n');
 
-    let tx = await contract.checkYourBet();
-    console.log(tx);
 
-    /**
-    let contractSigner = contract.connect(signer);
-    let tx = await contractSigner.placeBet(1, 1);
-    console.log(tx);
-    
-    //let contractSigner = contract.connect(signer);
-    let tx = await contract.placeBet(1, 1);
-    console.log(tx);
-
-    let balance = await provider.getBalance(contractAdress);
-    console.log('contract balance: ',balance); 
-    let newcurrentValue = await provider.getBalance(contractAdress);
-    console.log('contract deployer balance: ',  newcurrentValue);
-    */
+   
 
 }
 

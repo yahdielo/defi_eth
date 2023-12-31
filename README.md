@@ -31,7 +31,7 @@ to run the hardhat node of you havent already , on a different terminal window r
 
 back on your project terminal run the next command to deploy to the local network
 
-    npx hardhat --network localhost scripts/deploy.js
+    npx hardhat run  --network localhost scripts/deploy.js
 
 in the terminal where you ran the hardhad node you will see a log of all the transactions,
 a block will be mine on every transaction by default.
@@ -46,14 +46,3 @@ ethers.parseUnit(1 //ether);
 here is the link for that
 
     https://stackoverflow.com/questions/76536790/cannot-read-properties-of-undefined-reading-parseunits-hardhat-js
-
-# lowlevel call
-
-in the solidity coinroll contract in the withdrw function i was usinf this old syntax
-to send eth     recipient.call{ value : 1 //ether }(");  and it was fialinf, and found this way wish is the updated one 
-
-        //this sintaz is the updated version to make a low level call
-        (bool s,) = msg.sender.call.value(_amount)("");
-
-here is the reference:
-    https://ethereum.stackexchange.com/questions/118859/what-is-returned-from-msg-sender-callvalue-amount

@@ -1,9 +1,8 @@
-
 const hre = require("hardhat");
 
 async function main() {
   console.log("deploying...");
-  const Contract = await hre.ethers.getContractFactory("coinRoll")
+  const Contract = await hre.ethers.getContractFactory("coinRoll");
   const contract = await Contract.deploy();
   
   let tx = await contract.waitForDeployment();
