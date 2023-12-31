@@ -1,5 +1,5 @@
 const { ethers } = require("hardhat");
-const  { eventsListiner } = require("./subscription.js");
+const  { eventsListiner } = require("../scripts/subscription.js");
 
 require('dotenv').config()
 
@@ -11,19 +11,18 @@ const topic = "withdrawalMade(address,uint256)";
 
 async function main() {
 
-    let listiner = new eventsListiner(contractAdress, topic, provider);
+    const listiner = new eventsListiner(contractAdress, topic, provider);
 
     try {
-        let event = listiner.listen();
+        let event = await listiner.listen();
         console.log(event);
 
     } catch (err) {
         console.error(err);
     }
-
 }
-
-main().catch((error) => {
-    console.log(error);
+//module.exports = { startListining };
+main().catch((err) => {
+    console.log(err);
     process.exitCode = 1;
 })

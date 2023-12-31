@@ -1,6 +1,6 @@
 
 const { ethers } = require("hardhat");
-
+const  { eventsListiner } = require("./subscription.js");
 require('dotenv').config()
 
 // TODO:  creat a class or multimple classes to handle differetn methods and actions
@@ -31,6 +31,21 @@ async function sendEther(amount) {
     }
 }
 
+const topic = "withdrawalMade(address,uint256)";
+
+async function startListining() {
+
+    const listiner = new eventsListiner(contractAdress, topic, provider);
+
+    try {
+        let event = await listiner.listen();
+        console.log(event);
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 async function makeAbet() {
     try {
 
@@ -43,18 +58,11 @@ async function makeAbet() {
 }
 async function main() {
 
-
-    // @notice send ether code block
-
-    //let tx = await sendEther();
-    
-   // console.log(tx);
-
-    // @notice txSigner is needed to actually allow the interaction with the contract
-    // if not it will fail
+   // @notice txSigner is needed to actually allow the interaction with the contract
    let txSigner = contract.connect(signer);
-   console.log(`this is the txSiger: ${txSigner}\n`);
 
+
+   
    let newTx = await txSigner.withdrawal(ethers.parseUnits('1'));
    console.log(`newTx : \n${newTx}`);
 
@@ -65,10 +73,6 @@ async function main() {
     console.log('----------------------------------------');
 
     console.log('\n contract balance: ',balance, '\n');
-
-
-   
-
 }
 
 main().catch((error) => {
