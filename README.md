@@ -46,3 +46,21 @@ ethers.parseUnit(1 //ether);
 here is the link for that
 
     https://stackoverflow.com/questions/76536790/cannot-read-properties-of-undefined-reading-parseunits-hardhat-js
+
+#  ERROR IMPORTING CHAINLINK RVF
+
+one of the errors :
+    File @chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol, imported from contracts/coinRollVRF.sol, not found.
+i had the same issue for the other import,  even tho i copy and pasted from the chainlink official docs.
+
+after a lot of searching this are the right paths
+
+    import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
+    import "@chainlink/contracts/src/v0.8/vrf/VRFConsumerBaseV2.sol";
+    import "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
+
+# chainlink verifiable random function
+
+    https://docs.chain.link/vrf/
+
+ 
