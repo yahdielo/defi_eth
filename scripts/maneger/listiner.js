@@ -1,5 +1,4 @@
 const { ethers } = require("ethers");
-const { listeners } = require("process");
 const  { eventsListiner } = require("./subscription.js");
 
 require('dotenv').config()

@@ -1,62 +1,27 @@
 
 const { ethers } = require("hardhat");
-const  { eventsListiner } = require("./subscription.js")
-const { NonceManager } = require("@ethersproject/experimental");;
+const  { eventsListiner } = require("./maneger/subscription.js");
+const { walletManeger } = require("./maneger/walletManeger.js");
+
 require('dotenv').config()
 
 // TODO:  creat a class or multimple classes to handle differetn methods and actions
 // like sending eth and withdrawing eth, listen to diferent events of contracts
 //   fetch defi token prices, trace nft floor price  *least important
 //test wallets
-const contractDeployer = process.env.ADDRESS_0_PRIVATE_KEY;
-const ADDRESS_1 = process.env.ADDRESS_1_PRIVATE_KEY;
-const contractAdress = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
-const contractABI  = require("../artifacts/contracts/coinroll.sol/coinRoll.json");
-const { send } = require("process");
-const provider = new ethers.JsonRpcProvider('http://127.0.0.1:8545/');
-//const signer  = new ethers.Wallet(process.env.ADDRESS_0_PRIVATE_KEY, provider);
-const signer  = new ethers.Wallet(process.env.ADDRESS_1_PRIVATE_KEY, provider);
-const contract = new ethers.Contract(contractAdress, contractABI, provider);;
+const provider = new ethers.JsonRpcProvider(`https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`);
+const signer0 = new ethers.Wallet(process.env.WALLET_0_PRIVATE_KEY, provider); //this wallet is the deployer
+const gameABI = require("./ABIs/Game.json");
+const gameAddress = process.env.CONSUMER_ADDRESS;
 
 
-async function sendEther(amount) {
-    try {
-        let  transactionRequest = await signer.sendTransaction(
-            { 
-                to: contractAdress,
-                value: ethers.parseUnits(`${amount}`)// Sending 200 ETH
-            });
-        let sendTx = await transactionRequest;
-        console.log(sendTx);
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-
-async function makeAbet() {
-    try {
-
-        let tx = await contract.placeBet(1);
-        console.log(tx);
-
-    } catch (error) {
-        console.error(error);
-    }
-}
 async function main() {
 
+    const constract = ethers.Contract(gameAddress, gameABI, provider);// cerate instance of contract
+    //to call contract fucntion i need the contractsiger
 
-    let balance = await provider.getBalance(contractAdress);
-    console.log('----------------------------------------');
-
-    let contractSigner = contract.connect(signer);
-
-    let newTx = sendEther(100);
-    console.log(newTx);
-
-    console.log('----------------------------------------');
-    console.log('\n New contract balance: ',balance, '\n');
+    const contrcatSigner =  
+    
 }
 
 main().catch((error) => {

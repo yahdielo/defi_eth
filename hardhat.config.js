@@ -4,11 +4,11 @@ require('dotenv').config();
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.20",
-  defaultNetwork: "hardhat",
+  defaultNetwork: "polygon_mumbai",
   networks: {
-    sepolia: {
-      url: 'http://127.0.0.1:8545/',
-      accounts: [process.env.ADDRESS_0_PRIVATE_KEY]
+    polygon_mumbai: {
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+      accounts: [process.env.WALLET_0_PRIVATE_KEY]
     }
   }
 };
