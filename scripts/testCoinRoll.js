@@ -1,7 +1,5 @@
 
 const { ethers } = require("hardhat");
-const  { eventsListiner } = require("./maneger/subscription.js");
-const { walletManeger } = require("./maneger/walletManeger.js");
 
 require('dotenv').config()
 
@@ -11,19 +9,23 @@ require('dotenv').config()
 //test wallets
 const provider = new ethers.JsonRpcProvider(`https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`);
 const signer0 = new ethers.Wallet(process.env.WALLET_0_PRIVATE_KEY, provider); //this wallet is the deployer
-const gameABI = require("./ABIs/Game.json");
+const gameABI = require("./ABIs/joinGameContract.json");
+
 const gameAddress = process.env.CONSUMER_ADDRESS;
 
 
 async function main() {
 
-    const constract = ethers.Contract(gameAddress, gameABI, provider);// cerate instance of contract
-    //to call contract fucntion i need the contractsiger
+    const constract = new ethers.Contract(gameAddress, gameABI, provider);
 
-    const contrcatSigner =  
+    const contractSigner =  new ethers.Contract(gameAddress, gameABI, signer0);// contract Signer instance
+
+    let tx = await contractSigner.joinGame('0xd687EaE068e4D6Be9D9392C1AcD99BbF3aBC76C6');
+
+    await tx.wait();
+    console.log(tx);
     
 }
-
 main().catch((error) => {
     console.log(error);
     process.exitCode = 1;

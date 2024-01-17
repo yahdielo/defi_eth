@@ -27,7 +27,7 @@ class eventsListiner {
         try {
             console.log('listining...........\n');
 
-            this.provider.on(this.filter, ( result ) => {
+            this.provider.on(this.filter,  async ( result ) => {
                 console.log(result);             
             })
         } catch (err) {

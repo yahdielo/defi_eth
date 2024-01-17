@@ -1,13 +1,13 @@
 const hre = require("hardhat");
 
+const deployerAddress = '0xd687EaE068e4D6Be9D9392C1AcD99BbF3aBC76C6';
 async function main() {
-  console.log("deploying...");
-  const Contract = await hre.ethers.getContractFactory("Game");
+  console.log("deploying: caller...");
+  const Contract = await hre.ethers.getContractFactory("liquidityProvider");
   const contract = await Contract.deploy();
   
   let tx = await contract.waitForDeployment();
-
-  console.log(tx);
+  console.log(tx.target);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
