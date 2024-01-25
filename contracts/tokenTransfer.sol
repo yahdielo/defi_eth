@@ -3,7 +3,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 pragma solidity^0.8.17;
 
-contract tokenTransfer {
+contract tokenTransfer001 {
 
 
     IERC20 public token;
@@ -18,13 +18,13 @@ contract tokenTransfer {
     }
 
 
-    function transferPOPO(address _from, address _to, uint256 _amount) public  returns (uint256) {
+    function transferPOPO(address _to, uint256 _amount) public  returns (uint256) {
         
         
         //make sure we get the approval to before sending tokens
-        require(token.approve(address(msg.sender), _amount), 'not able to approve');
+        require(token.approve(address(this), _amount), 'not able to approve');
 
-        require(token.transferFrom(_from, _to, _amount), "transfer failed");
+        require(token.transferFrom(msg.sender, _to, _amount), "transfer failed");
         return _amount;
     }
 

@@ -3,7 +3,7 @@ const hre = require("hardhat");
 const deployerAddress = '0xd687EaE068e4D6Be9D9392C1AcD99BbF3aBC76C6';
 async function main() {
   console.log("deploying: caller...");
-  const Contract = await hre.ethers.getContractFactory("liquidityProvider");
+  const Contract = await hre.ethers.getContractFactory("LProvider");
   const contract = await Contract.deploy();
   
   let tx = await contract.waitForDeployment();

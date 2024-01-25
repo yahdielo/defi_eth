@@ -11,6 +11,10 @@ const signer = new ethers.Wallet(process.env.WALLET_0_PRIVATE_KEY, provider);
 const tokenTransferAddress ='0xc199482Ca1Ccc303EeB5434D98333552F192988D';
 const callerAddress = '0xcC4cCB523f4293825a049Dc64E0B4BC74e460C4a';
 const callerAbi = require('./ABIs/caller.json');
+const wethABI = require('./ABIs/WETHABI.json');
+const WETH = '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6';
+const kingDino = '0xd687EaE068e4D6Be9D9392C1AcD99BbF3aBC76C6';
+const LPContract = '0x26384F6A5921Ad85c9ED4A460dDEe35edD238c5D';
 //const UniV2FactoryContractAddress = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D';
 //const kishuWethPairAddress = '0xf82d8ec196fb0d56c6b82a8b1870f09502a49f88';
 //const kishuAddress = '0xA2b4C0Af19cC16a6CfAcCe81F192B024d625817D';
@@ -18,28 +22,11 @@ const deployer = '0xd687EaE068e4D6Be9D9392C1AcD99BbF3aBC76C6';
 
 async function main() {
 
-    const popo = new ethers.Contract(popoTokenAddress, popoABI , signer);
-    const tokenTransfer = new ethers.Contract(tokenTransferAddress, tokenTransferABI, signer);
-    const caller = new ethers.Contract(callerAddress, callerAbi, signer);
+    let wethContract = new ethers.Contract(WETH, wethABI, signer);
 
-    //let newtx  = await popo.balanceOf(deployer);
-    //format js big number to human readable
-    //let value  = ethers.formatEther(tx);
+    let tx = await wethContract.approve(LPContract, ethers.parseEther('0.01'));
+    console.log(tx);
 
-    //@note currently when i try to tranfer the token using a smart contract it fails
-    //i will try to call the allowance fucntion to see if that will let thw smart contract spend tokens
-    //on my behalf
-    //let newTx = await popo.allowance(deployer, tokenTransfer);
-    //console.log(newTx);
-
-    //approve the amount the spender can spend
-    //let aprove = await popo.approve(tokenTransfer, '100000000000000000000000000');
-    //console.log(aprove);
-
-    let timeStamp = await provider.getBlock();
-    console.log(timeStamp.timestamp);
-    let deadline = timeStamp.timestamp ;
-    console.log(deadline);
 }
 
 main().catch((err) => {
