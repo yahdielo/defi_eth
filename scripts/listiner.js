@@ -17,7 +17,8 @@ async function main() {
     wsProvider.on('pending' , async (txHash) => {
             try{
                 let txObj = await wsProvider.getTransaction(txHash);
-                await filterTx(txObj, txHash);
+                //await filterTx(txObj, txHash);
+                console.log(txObj);
                 
                 await delay(2000) 
                 } catch (err) {
